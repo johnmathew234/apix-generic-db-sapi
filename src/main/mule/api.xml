@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+    <flow name="apix-generic-db-sapi-main">
+        <http:listener config-ref="apiHttpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="apiRouter" />
+    </flow>
+    <flow name="put:\employee\(employeeId):application\json:apiRouter">
+		<flow-ref doc:name="updating-employee-details" doc:id="75fe87ac-4bdd-4412-8dd4-9c2e0141f284" name="updating-employee-details"/>
+    </flow>
+    <flow name="delete:\employee\(employeeId):apiRouter">
+		<flow-ref doc:name="deleting-user-from-employee-table" doc:id="ac91b6fa-2613-4185-b8da-1d3f2b0632a6" name="deleting-user-from-employee-table"/>
+    </flow>
+    <flow name="get:\employee:apiRouter">
+		<flow-ref doc:name="getting-all-user-details" doc:id="dec96558-3781-4146-89b8-f35db0ee3cef" name="getting-all-user-details"/>
+    </flow>
+    <flow name="get:\employee\(employeeId):apiRouter">
+		<flow-ref doc:name="getting-user-by-employee-id" doc:id="0d6fb3c5-3620-4284-b55d-43cb3e9c6bdc" name="getting-user-by-employee-id"/>
+    </flow>
+    <flow name="post:\employee:application\json:apiRouter">
+		<flow-ref doc:name="user-creation" doc:id="0d72c380-a231-4070-bbeb-e01b26ee9da0" name="user-creation"/>
+    </flow>
+</mule>
